@@ -40,7 +40,7 @@ import ecdsa_lib
 # {
 #    "curve": curveString,
 #    "public_key": publicKey,
-#    "message": message,
+#    "message": message, // In case same message for all sigs
 #    "known_type": dataBitsType,
 #    "known_bits": kbits,
 #    "signatures": sigs,
@@ -52,7 +52,10 @@ import ecdsa_lib
 # dataBitsType is the type of bits known : "LSB" or "MSB"
 # kbits is the number of known bits per secret k
 # signatures is a list of signatures dictionaries, with parameters as integers
-#  [ {"r": intR, "s": intS, "kp": leakednoncepart }, {...}, ... ]
+#  [ {"hash": xyz, "r": intR, "s": intS, "kp": leakednoncepart }, {...}, ... ]
+#
+# "hash" needs to be provided when no "message" key. Means each signature
+# has its own hash.
 #
 # Example if the LSB known for "k" are 0b000101 for a sig
 # -> { "r": xxx, "s": xxx, "kp": 5 }
@@ -101,9 +104,13 @@ def build_matrix(sigs, curve, num_bits, bits_type, hash_val):
     lattice = IntegerMatrix(num_sigs + 2, num_sigs + 2)
     kbi = 2 ** num_bits
     inv = ecdsa_lib.inverse_mod
+    if hash_val is not None:
+        hash_i = hash_val
     if bits_type == "LSB":
         for i in range(num_sigs):
             lattice[i, i] = 2 * kbi * n_order
+            if hash_val is None:
+                hash_i = sigs[i]["hash"]
             lattice[num_sigs, i] = (
                 2
                 * kbi
@@ -118,7 +125,7 @@ def build_matrix(sigs, curve, num_bits, bits_type, hash_val):
                 * kbi
                 * (
                     inv(kbi, n_order)
-                    * (sigs[i]["kp"] - hash_val * inv(sigs[i]["s"], n_order))
+                    * (sigs[i]["kp"] - hash_i * inv(sigs[i]["s"], n_order))
                     % n_order
                 )
                 + n_order
@@ -127,6 +134,8 @@ def build_matrix(sigs, curve, num_bits, bits_type, hash_val):
         # MSB
         for i in range(num_sigs):
             lattice[i, i] = 2 * kbi * n_order
+            if hash_val is None:
+                hash_i = sigs[i]["hash"]
             lattice[num_sigs, i] = (
                 2 * kbi * ((sigs[i]["r"] * inv(sigs[i]["s"], n_order)) % n_order)
             )
@@ -135,7 +144,7 @@ def build_matrix(sigs, curve, num_bits, bits_type, hash_val):
                 * kbi
                 * (
                     sigs[i]["kp"] * (curve_card // kbi)
-                    - hash_val * inv(sigs[i]["s"], n_order)
+                    - hash_i * inv(sigs[i]["s"], n_order)
                 )
                 + n_order
             )
@@ -157,6 +166,7 @@ def minimum_sigs_required(num_bits, curve_name):
 def recover_private_key(signatures_data, h_int, pub_key, curve, bits_type, num_bits):
 
     # Is known bits > 4 ?
+    # Change to 5 for 384 and 8 for 521 ?
     if num_bits < MINIMUM_BITS:
         print(
             "This script requires fixed known bits per signature, "
@@ -199,7 +209,11 @@ def lattice_attack_cli(file_name):
     except json.JSONDecodeError:
         print("Data file content is not JSON compatible.")
         return
-    hash_int = ecdsa_lib.sha2_int(bytes(data["message"]))
+    message = data.get("message")
+    if message:
+        hash_int = ecdsa_lib.sha2_int(bytes(message))
+    else:
+        hash_int = None  # Signal to use a hash per sig, sig data
     curve_string = data["curve"]
     data_type = data["known_type"]
     known_bits = data["known_bits"]

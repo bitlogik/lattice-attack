@@ -37,7 +37,7 @@ Read a JSON data file with the signatures, with the following keys :
 {
     "curve": curveString,
     "public_key": [pubx, puby],
-    "message": [a,b,c,...],
+    "message": [a,b,c,...], // In case same message for all signatures
     "known_type": "LSB"/"MSB",
     "known_bits": 6
     "signatures": [ {"r": intR, "s": intS, "kp": leakednoncepart }, {...}, ... ]
@@ -46,7 +46,10 @@ Read a JSON data file with the signatures, with the following keys :
 
 2^known_bits is a upper bound for kp.  
 Example if the LSB known for "k" are 0b000101 for a given signature  
- -> { "r": xxx, "s": xxx, "kp": 5 }  
+ -> { "hash": xyz, "r": xxx, "s": xxx, "kp": 5 }  
+
+"hash" needs to be provided as integer in the signatures data when there's no "message" key. That means each signature has its own hash.
+
 MSB shall be provided reduced like LSB, means only the known bits :  
 0b000101... -> "kp": 5  
 If the known bits are all 0 : "kp": 0

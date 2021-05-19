@@ -111,10 +111,9 @@ def privkey_to_pubkey(pv_key_int, curve_name):
     return [pubkey.x, pubkey.y]
 
 
-def ecdsa_sign_kout(message, pvkey, curve_name):
+def ecdsa_sign_kout(z_hash, pvkey, curve_name):
     # Perform ECDSA, but insecurely return the private k nonce
     n_mod = curve_n(curve_name)
-    z_hash = sha2_int(message)
     k_nonce = secrets.randbelow(n_mod)
     r_sig = scalar_mult_x(k_nonce, curve_name)
     s_sig = inverse_mod(k_nonce, n_mod) * (z_hash + r_sig * pvkey) % n_mod

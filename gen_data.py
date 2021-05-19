@@ -23,40 +23,53 @@ import json
 import ecdsa_lib
 
 
-def generates_signatures(number_sigs, msg, kbits, data_type, curve):
+def generates_signatures(number_sigs, message, kbits, data_type, curve):
     print("Preparing Data")
     d_key = random.randrange(ecdsa_lib.curve_n(curve))
     print("Private key to be found (as demo) :")
     print(hex(d_key))
-    q_pub = ecdsa_lib.privkey_to_pubkey(d_key, curve)
     sigs = []
     sz_curve = ecdsa_lib.curve_size(curve)
     kbi = int(2 ** kbits)
     print(f"Generating {number_sigs} signatures with curve {curve.upper()}")
     print(f" leaking {kbits} bits for k ({data_type})  ...")
+    if message is not None:
+        msg = message.encode("utf8")
+        # Always hash message provided with SHA2-256, whatever
+        hash_int = ecdsa_lib.sha2_int(msg)
     for _ in range(number_sigs):
+        if message is None:
+            # Use a random different message for each signature
+            # Note : there is no associated message from the hash
+            #  Do not ever that in practice, this is insecure, only here for demo
+            hash_int = random.randrange(ecdsa_lib.curve_n(curve))
         # Compute signatures with k (nonce), r, s
-        sig_rx, sig_s, sig_k = ecdsa_lib.ecdsa_sign_kout(msg, d_key, curve)
+        sig_info = ecdsa_lib.ecdsa_sign_kout(hash_int, d_key, curve)
         # pack and save data as : r, s, k%(2^bits) (partial k : "kp")
         sigs.append(
             {
-                "r": sig_rx,
-                "s": sig_s,
-                "kp": sig_k % kbi if data_type == "LSB" else sig_k >> (sz_curve - kbits),
+                "r": sig_info[0],
+                "s": sig_info[1],
+                "kp": sig_info[2] % kbi
+                if data_type == "LSB"
+                else sig_info[2] >> (sz_curve - kbits),
             }
         )
-    return {
-        "curve": curve,
-        "public_key": q_pub,
-        "message": list(msg),
+        if message is None:
+            sigs[-1]["hash"] = hash_int
+    ret = {
+        "curve": curve.upper(),
+        "public_key": ecdsa_lib.privkey_to_pubkey(d_key, curve),
         "known_type": data_type,
         "known_bits": kbits,
         "signatures": sigs,
     }
+    if message is not None:
+        ret["message"] = list(msg)
+    return ret
 
 
 if __name__ == "__main__":
-    DEFAULT_MESSAGE = "Message Signed blah"
     parser = argparse.ArgumentParser(
         description="Generate random demo data for ECDSA attack."
     )
@@ -68,7 +81,6 @@ if __name__ == "__main__":
     )
     parser.add_argument(
         "-m",
-        default=DEFAULT_MESSAGE.encode("utf8"),
         help="Message string",
         metavar="msg",
     )
