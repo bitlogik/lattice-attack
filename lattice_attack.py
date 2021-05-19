@@ -163,7 +163,9 @@ def minimum_sigs_required(num_bits, curve_name):
     return int(SIGNATURES_NUMBER_MARGIN * 4 / 3 * curve_size / num_bits)
 
 
-def recover_private_key(signatures_data, h_int, pub_key, curve, bits_type, num_bits):
+def recover_private_key(
+    signatures_data, h_int, pub_key, curve, bits_type, num_bits, loop
+):
 
     # Is known bits > 4 ?
     # Change to 5 for 384 and 8 for 521 ?
@@ -179,22 +181,28 @@ def recover_private_key(signatures_data, h_int, pub_key, curve, bits_type, num_b
     if n_sigs > len(signatures_data):
         print("Not enough signatures")
         return False
-    # To do : loop from shuffle
-    sigs_data = random.sample(signatures_data, n_sigs)
 
-    print("Constructing matrix")
-    lattice = build_matrix(sigs_data, curve, num_bits, bits_type, h_int)
+    loop_var = True
+    while loop_var:
+        sigs_data = random.sample(signatures_data, n_sigs)
 
-    print("Solving matrix ...")
-    for effort in RECOVERY_SEQUENCE:
-        lattice = reduce_lattice(lattice, effort)
-        res = test_result(lattice, pub_key, curve)
-        if res:
-            return res
+        print("Constructing matrix")
+        lattice = build_matrix(sigs_data, curve, num_bits, bits_type, h_int)
+
+        print("Solving matrix ...")
+        for effort in RECOVERY_SEQUENCE:
+            lattice = reduce_lattice(lattice, effort)
+            res = test_result(lattice, pub_key, curve)
+            if res:
+                return res
+        loop_var = loop
+        if loop:
+            print("One more try")
+
     return 0
 
 
-def lattice_attack_cli(file_name):
+def lattice_attack_cli(file_name, loop):
     print("\n ----- Lattice ECDSA Attack ----- ")
     print(f"Loading data from file {file_name}")
     try:
@@ -221,8 +229,10 @@ def lattice_attack_cli(file_name):
     q_target = data["public_key"]
     print(f"Running with {known_bits} bits of k ({data_type})")
     print(f"Starting recovery attack (curve {curve_string.upper()})")
+    if loop:
+        print("Will shuffle loop until the key found.")
     result = recover_private_key(
-        signatures, hash_int, q_target, curve_string, data_type, known_bits
+        signatures, hash_int, q_target, curve_string, data_type, known_bits, loop
     )
     if result:
         print("Key found \\o/")
@@ -239,6 +249,7 @@ if __name__ == "__main__":
         help="File name intput",
         metavar="filein",
     )
+    parser.add_argument("-l", help="Loop shuffle until found", action="store_true")
     arg = parser.parse_args()
-    lattice_attack_cli(arg.f)
+    lattice_attack_cli(arg.f, arg.l)
     print("")
