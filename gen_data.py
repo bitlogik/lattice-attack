@@ -30,6 +30,7 @@ def generates_signatures(number_sigs, msg, kbits, data_type, curve):
     print(hex(d_key))
     q_pub = ecdsa_lib.privkey_to_pubkey(d_key, curve)
     sigs = []
+    sz_curve = ecdsa_lib.curve_size(curve)
     kbi = int(2 ** kbits)
     print(f"Generating {number_sigs} signatures with curve {curve.upper()}")
     print(f" leaking {kbits} bits for k ({data_type})  ...")
@@ -41,7 +42,7 @@ def generates_signatures(number_sigs, msg, kbits, data_type, curve):
             {
                 "r": sig_rx,
                 "s": sig_s,
-                "kp": sig_k % kbi if data_type == "LSB" else sig_k >> (256 - kbits),
+                "kp": sig_k % kbi if data_type == "LSB" else sig_k >> (sz_curve - kbits),
             }
         )
     return {
