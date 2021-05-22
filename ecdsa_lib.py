@@ -100,6 +100,28 @@ def curve_n(curve_name):
     return order
 
 
+def check_publickey(pubkey, curve_str):
+    # Check pubkey (x,y) belongs on the curve
+    try:
+        curve_obj = getattr(ec, curve_str.upper())()
+    except Exception as exc:
+        raise Exception(
+            f"Unknown curves. Curves names available : {list(CURVES_ORDER.keys())}"
+        ) from exc
+    if len(pubkey) != 2:
+        raise Exception(
+            'Public key data shall be provided as :\n "public_key" : [ x, y ]'
+        )
+    publickey_obj = ec.EllipticCurvePublicNumbers(pubkey[0], pubkey[1], curve_obj)
+    ret = False
+    try:
+        publickey_obj.public_key()
+        ret = True
+    except ValueError:
+        pass
+    return ret
+
+
 def privkey_to_pubkey(pv_key_int, curve_name):
     # Return public point coordinates (Scalar multiplication of pvkey with base point G)
     ec_backend = getattr(ec, curve_name.upper())()

@@ -227,6 +227,11 @@ def lattice_attack_cli(file_name, loop):
     known_bits = data["known_bits"]
     signatures = data["signatures"]
     q_target = data["public_key"]
+    if not ecdsa_lib.check_publickey(q_target, curve_string):
+        print(
+            f"Public key data invalid, not on the given {curve_string.upper()} curve."
+        )
+        return
     print(f"Running with {known_bits} bits of k ({data_type})")
     print(f"Starting recovery attack (curve {curve_string.upper()})")
     if loop:
