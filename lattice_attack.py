@@ -155,7 +155,7 @@ def build_matrix(sigs, curve, num_bits, bits_type, hash_val):
 
 MINIMUM_BITS = 4
 RECOVERY_SEQUENCE = [None, 15, 25, 40, 50, 60]
-SIGNATURES_NUMBER_MARGIN = 1.05
+SIGNATURES_NUMBER_MARGIN = 1.03
 
 
 def minimum_sigs_required(num_bits, curve_name):
