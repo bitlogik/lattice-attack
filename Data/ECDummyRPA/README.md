@@ -1,11 +1,11 @@
 
-Data set "ECDummyRPA"
+## Data set "ECDummyRPA"
 
 Real traces on OpenSSL ECDSA
 
 From the publication, presented at SSTIC2021 :
 
-Return of ECC dummy point additions:  
+Return of ECC dummy point additions  
 Simple Power Analysis on efficient P-256 implementation  
 [PDF link](https://www.sstic.org/media/SSTIC2021/SSTIC-actes/return_of_ecc_dummy_point_additions_simple_power_a/SSTIC2021-Article-return_of_ecc_dummy_point_additions_simple_power_analysis_on_efficient_p-256_implementation-russon.pdf)
 
@@ -23,12 +23,10 @@ Using the *gen_input* script, the online data link above is read and file traces
 From this directory :
 
 `
-python3 gen_input.py  
-cd ../..  
-python3 lattice_attack.py -f Data/ECDummyRPA/data.json
+python3 gen_input.py && python3 ../../lattice_attack.py
 `
 
 Improvements from the research paper :
 
-* No need of scikit-learn, a basic arithmetic mean is enough to assess the height of the flat valley, and filter the correct signatures. This just required a manual threshold value.
-* Automatic computation of the subset required to build the matrix from all the correct signatures list, with random shuffle, provided by the main LatticeAttack software.
+* No need of scikit-learn, a basic arithmetic mean is enough to assess the height of the flat valley, and filter the correct signatures. This just requires a manual threshold value.
+

@@ -44,6 +44,8 @@ RESOURCE_URL = (
 
 
 # Helpers from ecdsa_lib
+
+
 def sha2(raw_message):
     # SHA-2 256
     return hashlib.sha256(raw_message).digest()

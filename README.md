@@ -65,6 +65,10 @@ There's a demo mode, provided by `gen_data.py`. Before performing an attack, it 
 Call lattice_attack and gen_data with the "-h" argument to see more about the options.
 
 
+## Real data
+
+A real data set is provided in the [Data/ECDummyRPA directory](Data/ECDummyRPA).
+
 ## Bibliography
 
 These related publications helped to develop this software. You can also find out deeper insights about the underlying mathematics used.
@@ -99,8 +103,8 @@ January 2021
 
 **Return of ECC dummy point additions**  
 Simple Power Analysis on efficient P-256 implementation  
-by Andy Russon
-SSTIC 2021, June 2021
+by Andy Russon  
+SSTIC 2021, June 2021  
 [PDF Link](https://www.sstic.org/media/SSTIC2021/SSTIC-actes/return_of_ecc_dummy_point_additions_simple_power_a/SSTIC2021-Article-return_of_ecc_dummy_point_additions_simple_power_analysis_on_efficient_p-256_implementation-russon.pdf)
 
 
