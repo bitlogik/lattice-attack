@@ -1,3 +1,6 @@
 ﻿__pycache__
 *.pyc
 data.json
+Data/ECDummyRPA/test
+*.pem
+*.tar.gz
