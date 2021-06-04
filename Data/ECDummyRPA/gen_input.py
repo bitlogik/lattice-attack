@@ -49,12 +49,8 @@ def sha2(raw_message):
     return hashlib.sha256(raw_message).digest()
 
 
-def bytes_to_int(bytes_data):
-    return int.from_bytes(bytes_data, "big")
-
-
 def sha2_int(data):
-    return bytes_to_int(sha2(data))
+    return int.from_bytes(sha2(data), "big")
 
 
 # Special helpers for this case
