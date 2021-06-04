@@ -74,6 +74,12 @@ by Dan Boneh and Ramarathnam Venkatesan
 CRYPTO '96: Proceedings of the 16th Annual International Cryptology Conference on Advances in Cryptology, August 1996  
 [PDF Link](https://link.springer.com/content/pdf/10.1007%2F3-540-68697-5_11.pdf)
 
+**Return of the Hidden Number Problem**  
+A Widespread and Novel Key Extraction Attack on ECDSA and DSA  
+by Kegan Ryan  
+IACR Transactions on Cryptographic Hardware and Embedded Systems (TCHES), December 2018  
+[PDF Link](https://tches.iacr.org/index.php/TCHES/article/view/7337/6509)
+
 **Minerva : The curse of ECDSA nonces**  
 Systematic analysis of lattice attacks on noisy leakage of bit-length of ECDSA nonces  
 by Ján Jančár, Vladimír Sedláček1, Petr Švenda and Marek Sýs  
