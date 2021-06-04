@@ -97,6 +97,12 @@ by Victor Lomne and Thomas Roche
 January 2021  
 [PDF Link](https://ninjalab.io/wp-content/uploads/2021/01/a_side_journey_to_titan.pdf)
 
+**Return of ECC dummy point additions**  
+Simple Power Analysis on efficient P-256 implementation  
+by Andy Russon
+SSTIC 2021, June 2021
+[PDF Link](https://www.sstic.org/media/SSTIC2021/SSTIC-actes/return_of_ecc_dummy_point_additions_simple_power_a/SSTIC2021-Article-return_of_ecc_dummy_point_additions_simple_power_analysis_on_efficient_p-256_implementation-russon.pdf)
+
 
 ## License
 
