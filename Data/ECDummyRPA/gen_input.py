@@ -39,7 +39,7 @@ import urllib.request
 
 RESOURCE_URL = (
     "https://github.com/orangecertcc/ecdummyrpa/raw/"
-    "144974ae1c35eb1f0ef0f0fdbb4299d808624f7a/sample.tar.gz"
+    "main/sample.tar.gz"
 )
 
 

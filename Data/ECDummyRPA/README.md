@@ -15,8 +15,7 @@ by Andy Russon
 
 [Software repository](https://github.com/orangecertcc/ecdummyrpa)
 
-[Data URL](
-https://github.com/orangecertcc/ecdummyrpa/raw/144974ae1c35eb1f0ef0f0fdbb4299d808624f7a/sample.tar.gz)
+[Data URL](https://github.com/orangecertcc/ecdummyrpa/raw/main/sample.tar.gz)
 
 Using the *gen_input* script, the online data link above is read and file traces are parsed and filtered to build a JSON file compatible with the expected input format for LatticeAttack.
 
