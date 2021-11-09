@@ -251,7 +251,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "-f",
         default="data.json",
-        help="File name intput",
+        help="File name input",
         metavar="filein",
     )
     parser.add_argument("-l", help="Loop shuffle until found", action="store_true")

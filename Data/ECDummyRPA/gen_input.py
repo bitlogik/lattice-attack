@@ -162,7 +162,7 @@ if __name__ == "__main__":
     )
     arg = parser.parse_args()
 
-    # Test id data were downloaded by testing presence of pubkey file
+    # Test if data were downloaded by testing presence of pubkey file
     if not os.path.exists("pubkey.pem"):
         print("Downloading raw data ...")
         get_data_source(RESOURCE_URL)
