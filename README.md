@@ -71,6 +71,14 @@ There's a demo mode, provided by `gen_data.py`. Before performing an attack, it 
 
 Call lattice_attack and gen_data with the "-h" argument to see more about the options.
 
+Example :
+
+Generating 50 ECDSA r1 (P256 FIPS) signatures of the message "HelloYou", with the 8 starting bits of the secret ephemeral nonce known and saved. And then try to recover the private key from these data.
+
+```
+python3 gen_data.py -f data1.json -m "HelloYou" -c SECP256R1 -b 8 -t MSB -n 50
+python3 lattice_attack.py -f data1.json
+```
 
 ## Real data
 
