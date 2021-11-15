@@ -22,6 +22,13 @@ fpylll : doesn't work in Windows, only in Linux.
 
 We recommend that you **install fpylll with the distribution package manager**. Else this requires lots of compilation tools and Python low level libraries. The package managers, such as apt or dnf, are providing all these, with pre-compiled binaries.
 
+Install fpylll in Ubuntu (>= 20.04) :
+
+```
+sudo add-apt-repository universe
+sudo apt install python3-fpylll
+```
+
 
 ## Use
 

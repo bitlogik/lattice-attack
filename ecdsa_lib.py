@@ -115,7 +115,7 @@ def check_publickey(pubkey, curve_str):
     publickey_obj = ec.EllipticCurvePublicNumbers(pubkey[0], pubkey[1], curve_obj)
     ret = False
     try:
-        publickey_obj.public_key()
+        publickey_obj.public_key(backends.default_backend())
         ret = True
     except ValueError:
         pass

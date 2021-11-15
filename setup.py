@@ -10,14 +10,14 @@ with open("README.md") as readme_file:
 
 
 requirements = [
-    "cryptography>=3.4.1",
+    "cryptography>=2.1",
     "fpylll>=0.5",
 ]
 
 
 setup(
     name="lattice-attack",
-    version="0.1.0",
+    version="0.1.2",
     description="Lattice ECDSA Attack from partial nonces.",
     long_description=readme + "\n\n",
     author="BitLogiK",
