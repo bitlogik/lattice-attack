@@ -144,7 +144,9 @@ def get_data_source(res_url):
     # Get tar gz file at given url and extract files locally
     # Use this only on known trusted or friendly TAR files,
     # as this can write files anywhere locally
-    with urllib.request.urlopen(res_url) as remote_data:
+    with urllib.request.urlopen(
+        urllib.request.Request(res_url, headers={"User-Agent": "Mozilla"})
+    ) as remote_data:
         tardata = tarfile.open(fileobj=remote_data, mode="r:gz")
         print("Extracting data files ...")
         tardata.extractall()
